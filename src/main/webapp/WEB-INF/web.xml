@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="https://jakarta.ee/xml/ns/jakarta-ee"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakarta-ee https://jakarta.ee/xml/ns/jakarta-ee/web-app_6_0.xsd">
+
+  <!-- 全局统一UTF-8编码过滤器（放最前面，优先执行） -->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>com.lab.filter.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>charset</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- 登录权限拦截过滤器
+       注意：LoginFilter 已用 @WebFilter("/*") 注解注册，此处不可重复配置，
+       否则同一次请求会执行两遍过滤器链（曾导致 302 死循环）。 -->
+
+  <!-- 默认首页 -->
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+
+  <!-- 全局错误页面 -->
+  <error-page>
+    <error-code>403</error-code>
+    <location>/error/403.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/error/404.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error/500.jsp</location>
+  </error-page>
+
+  <!-- Session会话超时 30分钟无操作自动失效 -->
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <!-- JSP全局配置：全局开启EL表达式、统一页面编码UTF-8 -->
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <el-ignored>false</el-ignored>
+      <page-encoding>UTF-8</page-encoding>
+    </jsp-property-group>
+  </jsp-config>
+</web-app>
